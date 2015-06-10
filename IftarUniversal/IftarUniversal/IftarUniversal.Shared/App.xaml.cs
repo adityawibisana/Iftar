@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.Prism.Mvvm;
+﻿using IftarUniversal.Service;
+using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Practices.Prism.Mvvm.Interfaces;
 using Microsoft.Practices.Unity;
 using System.Threading.Tasks;
@@ -29,6 +30,11 @@ namespace IftarUniversal
         {
             _container.RegisterInstance<ISessionStateService>(SessionStateService);
             _container.RegisterInstance<INavigationService>(NavigationService);
+
+            _container.RegisterInstance<IHelloService>(new HelloService());
+
+            _container.RegisterType<PrayTime>(new ContainerControlledLifetimeManager());
+            _container.RegisterType<LocationService>(new ContainerControlledLifetimeManager());
 
             ViewModelLocationProvider.SetDefaultViewModelFactory((viewModelType) => _container.Resolve(viewModelType)); 
             return Task.FromResult<object>(null);

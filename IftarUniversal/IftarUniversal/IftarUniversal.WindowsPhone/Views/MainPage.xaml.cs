@@ -1,4 +1,7 @@
-﻿using System;
+﻿using IftarUniversal.Service;
+using Microsoft.Practices.Prism.Mvvm;
+using Microsoft.Practices.Prism.StoreApps;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,11 +23,11 @@ namespace IftarUniversal.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class MainPage : VisualStateAwarePage
     {
         public MainPage()
-        {
-            this.InitializeComponent();
+        { 
+            this.InitializeComponent(); 
         }
 
         /// <summary>

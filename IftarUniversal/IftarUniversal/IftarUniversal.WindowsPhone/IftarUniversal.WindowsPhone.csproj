@@ -120,11 +120,16 @@
     <Reference Include="Microsoft.Practices.Unity">
       <HintPath>..\..\..\..\UniversalAppsLib\Microsoft.Practices.Unity.dll</HintPath>
     </Reference>
+    <Reference Include="WinRTXamlToolkit.Controls.Gauge">
+      <HintPath>..\..\packages\WinRTXamlToolkit.Controls.Gauge.WindowsPhone.1.8.1.0\lib\wpa\WinRTXamlToolkit.Controls.Gauge.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="UserControl\" />
+  </ItemGroup>
   <ItemGroup>
     <Page Include="Views\MainPage.xaml">
       <SubType>Designer</SubType>
