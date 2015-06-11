@@ -11,6 +11,7 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mvvm:ViewModelLocator.AutoWireViewModel="True"
+    
     >
 
     <Grid> 

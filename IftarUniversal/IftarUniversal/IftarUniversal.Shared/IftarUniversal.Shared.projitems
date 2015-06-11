@@ -15,8 +15,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Service\HelloService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Service\IHelloService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DummyData\MainPageVMDummy.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Service\AppSettingService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Service\LocationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Service\PrayTime.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MainPageViewModel.cs" />

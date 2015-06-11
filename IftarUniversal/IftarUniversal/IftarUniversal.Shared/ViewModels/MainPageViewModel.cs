@@ -1,9 +1,11 @@
 ﻿using IftarUniversal.Service;
+using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
+using System.Threading;
 using Windows.Devices.Geolocation;
+using Windows.UI.Core;
 
 namespace IftarUniversal.ViewModels
 {
@@ -48,6 +50,19 @@ namespace IftarUniversal.ViewModels
                 SetProperty(ref _second, value);
             }
         }
+
+        private String _status;
+        public string Status
+        {
+            get
+            {
+                return _status;
+            }
+            set
+            {
+                SetProperty(ref _status, value);
+            }
+        }
         #endregion
 
         #region Fields
@@ -56,44 +71,109 @@ namespace IftarUniversal.ViewModels
         private PrayTime _prayTime;
         private LocationService _locationService;
         private Geoposition _position;
+        Timer _timer;
 
         #endregion
 
+        #region Commands
+        public DelegateCommand PageLoadedCommand { get; private set; }
+        #endregion
 
+        #region dummy
+        double dLat = -8.636867;
+        double dLong = 115.26345;
+        #endregion
         public MainPageViewModel(IHelloService helloService, PrayTime prayTime, LocationService locationService)
         {
             this._helloService = helloService;
             this._prayTime = prayTime;
             this._locationService = locationService;
 
-            
+            Status = "Calculating ...";
+            if (PageLoadedCommand == null)
+            {
+                PageLoadedCommand = new DelegateCommand(() =>
+                {
+                    Update();
+                    StartTimer();
+                });
+            } 
+        } 
+
+        private void StartTimer()
+        { 
+           _timer = new Timer(new TimerCallback( async (state) =>
+           {
+               await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+               {
+                   Second--;
+                   if (Second<0)
+                   {
+                       Second = 59;
+                       Minute--;
+                       if (Minute<0)
+                       {
+                           Hour--;
+                           if (Hour < 0)
+                           { 
+                               Hour = 0;
+                               Minute = 0;
+                               Second = 0;
+
+                               Update();
+                           }
+                           else
+                           {
+                               Minute = 59;
+                           }
+                       }
+
+                   }
+               });
+           }), new AutoResetEvent(false), TimeSpan.FromSeconds(1), TimeSpan.FromMilliseconds(1)); 
         }
 
-        public async void Update()
-        {
-            DateTime dt = DateTime.Now;
+        public void Update()
+        { 
+            DateTime now = DateTime.Now;
 
-            if (_position == null)
+            //if (_position == null)
+            //{
+            //    _position = await _locationService.GetPosition();
+            //}
+
+            //var x = _prayTime.getPrayerTimes(now.Year, now.Month, now.Day, _position.Coordinate.Latitude, _position.Coordinate.Longitude, TimeZoneInfo.Local.BaseUtcOffset.Hours);
+            var x = _prayTime.getPrayerTimes(now.Year, now.Month, now.Day, dLat, dLong, TimeZoneInfo.Local.BaseUtcOffset.Hours);
+
+
+            DateTime fajrTime = new DateTime(now.Year, now.Month, now.Day, MicroTimeConvert(x[0])[0] , MicroTimeConvert(x[0])[1], 0);
+            DateTime maghribTime = new DateTime(now.Year, now.Month, now.Day, MicroTimeConvert(x[5])[0], MicroTimeConvert(x[5])[1], 0);
+
+            long diff = 0;
+            if (fajrTime.Ticks > now.Ticks)
             {
-                _position = await _locationService.GetPosition();
-            }
+                //saur
+                Status = "Suhoor Time Remaining";
+                diff = fajrTime.Ticks - now.Ticks;
 
-            var x = _prayTime.getPrayerTimes(dt.Year, dt.Month, dt.Day, _position.Coordinate.Latitude, _position.Coordinate.Longitude, TimeZoneInfo.Local.BaseUtcOffset.Hours);
-
-            int[] hourMin = MicroTimeConvert(x[5]);
-
-            // wait for iftar
-            if (dt.Hour <= hourMin[0] && dt.Minute < hourMin[1])
+            } 
+            else if (maghribTime.Ticks > now.Ticks)
             {
-
+                // puasa
+                Status = "Wait";
+                diff = maghribTime.Ticks - now.Ticks;
             }
             else
             {
+                //sisanya
+                Status = "Enjoy the Iftar";
+            } 
 
-            }
+            TimeSpan ts = TimeSpan.FromTicks(diff);
 
-            //DateTime magribTime = new DateTime(dt.Year, dt.Month, dt.Day, hourMin[0], hourMin[1], 0);
-           
+            Hour = ts.Hours;
+            Minute = ts.Minutes;
+            Second = ts.Seconds; 
         }
 
         private int[] MicroTimeConvert(String time)
