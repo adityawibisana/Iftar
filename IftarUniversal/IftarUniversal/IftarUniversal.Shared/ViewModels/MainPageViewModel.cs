@@ -1,6 +1,7 @@
 ﻿using IftarUniversal.Service;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
+using Microsoft.Practices.Prism.Mvvm.Interfaces;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -67,27 +68,28 @@ namespace IftarUniversal.ViewModels
 
         #region Fields
 
-        private IHelloService _helloService;
         private PrayTime _prayTime;
         private LocationService _locationService;
         private Geoposition _position;
+        private INavigationService _navigationService;
         Timer _timer;
 
         #endregion
 
         #region Commands
         public DelegateCommand PageLoadedCommand { get; private set; }
+        public DelegateCommand MenuCommand { get; private set; }
         #endregion
 
         #region dummy
         double dLat = -8.636867;
         double dLong = 115.26345;
         #endregion
-        public MainPageViewModel(IHelloService helloService, PrayTime prayTime, LocationService locationService)
-        {
-            this._helloService = helloService;
+        public MainPageViewModel(PrayTime prayTime, LocationService locationService, INavigationService navigationService)
+        { 
             this._prayTime = prayTime;
             this._locationService = locationService;
+            this._navigationService = navigationService;
 
             Status = "Calculating ...";
             if (PageLoadedCommand == null)
@@ -97,7 +99,13 @@ namespace IftarUniversal.ViewModels
                     Update();
                     StartTimer();
                 });
-            } 
+            }
+
+            MenuCommand = new DelegateCommand(() =>
+            {
+                _timer.Dispose();
+                _navigationService.Navigate("Setting", null);
+            });
         } 
 
         private void StartTimer()
@@ -130,7 +138,7 @@ namespace IftarUniversal.ViewModels
 
                    }
                });
-           }), new AutoResetEvent(false), TimeSpan.FromSeconds(1), TimeSpan.FromMilliseconds(1)); 
+           }), new AutoResetEvent(false), TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1)); 
         }
 
         public void Update()

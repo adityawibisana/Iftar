@@ -29,9 +29,7 @@ namespace IftarUniversal
         protected override Task OnInitializeAsync(IActivatedEventArgs args)
         {
             _container.RegisterInstance<ISessionStateService>(SessionStateService);
-            _container.RegisterInstance<INavigationService>(NavigationService);
-
-            _container.RegisterInstance<IHelloService>(new HelloService());
+            _container.RegisterInstance<INavigationService>(NavigationService); 
 
             _container.RegisterType<PrayTime>(new ContainerControlledLifetimeManager());
             _container.RegisterType<LocationService>(new ContainerControlledLifetimeManager());

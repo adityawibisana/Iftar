@@ -34,11 +34,14 @@
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions> 
+        
+        <Button VerticalAlignment="Top" HorizontalAlignment="Right" Content="Menu" Command="{Binding MenuCommand}"></Button>
+        
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Text="{Binding Hour}"></TextBlock>
-            <TextBlock Text=":"></TextBlock>
+            <TextBlock Text="."></TextBlock>
             <TextBlock Text="{Binding Minute}"></TextBlock>
-            <TextBlock Text=":"></TextBlock>
+            <TextBlock Text="."></TextBlock>
             <TextBlock Text="{Binding Second}"></TextBlock>
         </StackPanel>
         
