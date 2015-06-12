@@ -16,6 +16,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)DummyData\MainPageVMDummy.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DummyData\SettingPageVMDummy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Service\AppSettingService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Service\LocationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Service\PrayTime.cs" />
@@ -26,5 +27,8 @@
     <PRIResource Include="$(MSBuildThisFileDirectory)Strings\ar-SA\Resources.resw" />
     <PRIResource Include="$(MSBuildThisFileDirectory)Strings\en-US\Resources.resw" />
     <PRIResource Include="$(MSBuildThisFileDirectory)Strings\id-ID\Resources.resw" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Controls\" />
   </ItemGroup>
 </Project>
