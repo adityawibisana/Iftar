@@ -5,6 +5,7 @@ using Microsoft.Practices.Prism.Mvvm.Interfaces;
 using System;
 using System.Diagnostics;
 using System.Threading;
+using Windows.ApplicationModel.Resources;
 using Windows.Devices.Geolocation;
 using Windows.UI.Core;
 
@@ -72,6 +73,7 @@ namespace IftarUniversal.ViewModels
         private LocationService _locationService;
         private Geoposition _position;
         private INavigationService _navigationService;
+        private ResourceLoader _langLoader;
         Timer _timer;
 
         #endregion
@@ -85,13 +87,17 @@ namespace IftarUniversal.ViewModels
         double dLat = -8.636867;
         double dLong = 115.26345;
         #endregion
-        public MainPageViewModel(PrayTime prayTime, LocationService locationService, INavigationService navigationService)
+        public MainPageViewModel(PrayTime prayTime, LocationService locationService, INavigationService navigationService, ResourceLoader langLoader)
         { 
             this._prayTime = prayTime;
             this._locationService = locationService;
             this._navigationService = navigationService;
+            this._langLoader = langLoader;
+
+
 
             Status = "Calculating ...";
+
             if (PageLoadedCommand == null)
             {
                 PageLoadedCommand = new DelegateCommand(() =>
@@ -161,20 +167,20 @@ namespace IftarUniversal.ViewModels
             if (fajrTime.Ticks > now.Ticks)
             {
                 //saur
-                Status = "Suhoor Time Remaining";
+                Status = _langLoader.GetString("Suhoor Time Remaining");
                 diff = fajrTime.Ticks - now.Ticks;
 
             } 
             else if (maghribTime.Ticks > now.Ticks)
             {
                 // puasa
-                Status = "Wait";
+                Status = _langLoader.GetString("Wait");
                 diff = maghribTime.Ticks - now.Ticks;
             }
             else
             {
                 //sisanya
-                Status = "Enjoy the Iftar";
+                Status = _langLoader.GetString("Enjoy the Iftar");
             } 
 
             TimeSpan ts = TimeSpan.FromTicks(diff);

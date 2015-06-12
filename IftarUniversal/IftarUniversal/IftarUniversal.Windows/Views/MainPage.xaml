@@ -29,7 +29,7 @@
 
 
     
-    <Grid Background="Black" VerticalAlignment="Center">
+    <Grid Background="Black">
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
@@ -37,16 +37,25 @@
         
         <Button VerticalAlignment="Top" HorizontalAlignment="Right" Content="Menu" Command="{Binding MenuCommand}"></Button>
         
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="{Binding Hour}"></TextBlock>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+            <Grid>
+                <TextBlock Text="{Binding Hour}"></TextBlock>
+                <TextBlock x:Uid="Hour" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Bottom"></TextBlock>
+            </Grid>
             <TextBlock Text="."></TextBlock>
-            <TextBlock Text="{Binding Minute}"></TextBlock>
+            <Grid>
+                <TextBlock Text="{Binding Minute}"></TextBlock>
+                <TextBlock x:Uid="Minute" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Bottom"></TextBlock>
+            </Grid>
             <TextBlock Text="."></TextBlock>
-            <TextBlock Text="{Binding Second}"></TextBlock>
+            <Grid>
+                <TextBlock Text="{Binding Second}"></TextBlock>
+                <TextBlock x:Uid="Second" FontSize="12"  HorizontalAlignment="Center" VerticalAlignment="Bottom"></TextBlock>
+            </Grid>
         </StackPanel>
         
        
-        <TextBlock Text="{Binding Status}" Grid.Row="1" HorizontalAlignment="Center" FontSize="48"></TextBlock>
+        <TextBlock Text="{Binding Status}" Grid.Row="1" HorizontalAlignment="Center" FontSize="48" VerticalAlignment="Top" Margin="12"></TextBlock>
          
 
     </Grid> 
