@@ -1,39 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Windows.Devices.Geolocation;
 
 namespace IftarUniversal.Service
 {
     public class AppSettingService
     {
-        Windows.Storage.ApplicationDataContainer localSettings;
+        private Windows.Storage.ApplicationDataContainer localSettings;
 
         public AppSettingService()
         {
             localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
         }
 
-        public Double UserLatitude
+        public bool IsLocationSet
         {
             get
-            {
-                return (double) localSettings.Values["latitude"];
+            { 
+                return localSettings.Values["IsLocationSet"] == null ? false : true;
             }
             set
             {
-                localSettings.Values["latitude"] = value;
+                localSettings.Values["IsLocationSet"] = value;
             }
         }
 
-        public Double UserLongitude
+        public double UserLatitude
         {
             get
-            {
-                return (double)localSettings.Values["longitude"];
+            { 
+                return (double) localSettings.Values["UserLatitude"];
             }
             set
             {
-                localSettings.Values["longitude"] = value;
+                localSettings.Values["UserLatitude"] = value;
+            }
+        }
+
+        public double UserLongitude
+        {
+            get
+            {
+                return (double)localSettings.Values["UserLongitude"];
+            }
+            set
+            {
+                localSettings.Values["UserLongitude"] = value;
             }
         }
     }

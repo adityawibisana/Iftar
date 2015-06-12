@@ -70,10 +70,10 @@ namespace IftarUniversal.ViewModels
         #region Fields
 
         private PrayTime _prayTime;
-        private LocationService _locationService;
-        private Geoposition _position;
+        private LocationService _locationService; 
         private INavigationService _navigationService;
         private ResourceLoader _langLoader;
+        private AppSettingService _settingService;
         Timer _timer;
 
         #endregion
@@ -87,14 +87,13 @@ namespace IftarUniversal.ViewModels
         double dLat = -8.636867;
         double dLong = 115.26345;
         #endregion
-        public MainPageViewModel(PrayTime prayTime, LocationService locationService, INavigationService navigationService, ResourceLoader langLoader)
+        public MainPageViewModel(PrayTime prayTime, LocationService locationService, INavigationService navigationService, ResourceLoader langLoader, AppSettingService settingService)
         { 
             this._prayTime = prayTime;
             this._locationService = locationService;
             this._navigationService = navigationService;
             this._langLoader = langLoader;
-
-
+            this._settingService = settingService;
 
             Status = "Calculating ...";
 
@@ -134,6 +133,7 @@ namespace IftarUniversal.ViewModels
                                Minute = 0;
                                Second = 0;
 
+                               _timer.Dispose();
                                Update();
                            }
                            else
@@ -147,20 +147,26 @@ namespace IftarUniversal.ViewModels
            }), new AutoResetEvent(false), TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1)); 
         }
 
-        public void Update()
-        { 
+        public async void Update()
+        {
             DateTime now = DateTime.Now;
 
-            //if (_position == null)
-            //{
-            //    _position = await _locationService.GetPosition();
-            //}
+            if (!_settingService.IsLocationSet)
+            {
+                Geoposition position = await _locationService.GetPosition();
 
-            //var x = _prayTime.getPrayerTimes(now.Year, now.Month, now.Day, _position.Coordinate.Latitude, _position.Coordinate.Longitude, TimeZoneInfo.Local.BaseUtcOffset.Hours);
-            var x = _prayTime.getPrayerTimes(now.Year, now.Month, now.Day, dLat, dLong, TimeZoneInfo.Local.BaseUtcOffset.Hours);
+                _settingService.UserLatitude = position.Coordinate.Point.Position.Latitude;
+                _settingService.UserLongitude = position.Coordinate.Point.Position.Longitude;
+
+                _settingService.IsLocationSet = true;
+            }
+
+            var x = _prayTime.getPrayerTimes(now.Year, now.Month, now.Day, 
+                _settingService.UserLatitude, _settingService.UserLongitude, 
+                TimeZoneInfo.Local.BaseUtcOffset.Hours); 
 
 
-            DateTime fajrTime = new DateTime(now.Year, now.Month, now.Day, MicroTimeConvert(x[0])[0] , MicroTimeConvert(x[0])[1], 0);
+            DateTime fajrTime = new DateTime(now.Year, now.Month, now.Day, MicroTimeConvert(x[0])[0], MicroTimeConvert(x[0])[1], 0);
             DateTime maghribTime = new DateTime(now.Year, now.Month, now.Day, MicroTimeConvert(x[5])[0], MicroTimeConvert(x[5])[1], 0);
 
             long diff = 0;
@@ -170,7 +176,7 @@ namespace IftarUniversal.ViewModels
                 Status = _langLoader.GetString("Suhoor Time Remaining");
                 diff = fajrTime.Ticks - now.Ticks;
 
-            } 
+            }
             else if (maghribTime.Ticks > now.Ticks)
             {
                 // puasa
@@ -181,13 +187,13 @@ namespace IftarUniversal.ViewModels
             {
                 //sisanya
                 Status = _langLoader.GetString("Enjoy the Iftar");
-            } 
+            }
 
             TimeSpan ts = TimeSpan.FromTicks(diff);
 
             Hour = ts.Hours;
             Minute = ts.Minutes;
-            Second = ts.Seconds; 
+            Second = ts.Seconds;
         }
 
         private int[] MicroTimeConvert(String time)
