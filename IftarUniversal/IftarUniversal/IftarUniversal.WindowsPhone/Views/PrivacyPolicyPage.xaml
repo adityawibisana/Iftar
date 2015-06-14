@@ -31,15 +31,9 @@
         
         <TextBlock Grid.Row="1" Text="This application use your location, so that we can calculate the Iftar time for you. We will not collect any information regarding your information." 
                    TextWrapping="Wrap" Margin="12" FontSize="24"></TextBlock>
-        
-        <ToggleSwitch Name="LocationSwitch" Grid.Row="2" Margin="12" OffContent="Turn On Location" OnContent="Turn Off Location" IsOn="{Binding IsLocationEnabled, Mode=TwoWay}">
-            <i:Interaction.Behaviors>
-                <core:EventTriggerBehavior EventName="IsEnabledChanged">
-                    <core:InvokeCommandAction Command="{Binding IsEnabledChangedCommand}"
-                                              CommandParameter="{Binding ElementName=LocationSwitch, Path=IsOn}"
-                      />
-                </core:EventTriggerBehavior>
-            </i:Interaction.Behaviors>
+
+        <ToggleSwitch Name="LocationSwitch" Grid.Row="2" Margin="12" OffContent="Turn On Location" OnContent="Turn Off Location"
+                      IsOn="{Binding IsLocationEnabled, Mode=TwoWay}"> 
         </ToggleSwitch>
 
     </Grid>

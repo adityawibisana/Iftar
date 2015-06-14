@@ -4,6 +4,7 @@ using Microsoft.Practices.Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Windows.UI.Xaml.Controls;
 
 namespace IftarUniversal.ViewModels
 {
@@ -19,12 +20,10 @@ namespace IftarUniversal.ViewModels
             }
             set
             {
-                _appSettingService.IsLocationEnabled = value;
-
-                _isLocationEnabled = value;
-                SetProperty(ref _isLocationEnabled, value);
+                _appSettingService.IsLocationEnabled = value; 
+                SetProperty(ref _isLocationEnabled, value); 
             }
-        }
+        } 
         #endregion
 
         #region Field
@@ -40,11 +39,7 @@ namespace IftarUniversal.ViewModels
             this._appSettingService = appSettingService;
             PageLoadedCommand = new DelegateCommand(() =>
             {
-                IsLocationEnabled = _appSettingService.IsLocationEnabled;
-                IsEnabledChangedCommand = new DelegateCommand<bool?>((args) =>
-                {
-                    IsLocationEnabled = args == null ? (bool)true : (bool)args;
-                });
+                IsLocationEnabled = _appSettingService.IsLocationEnabled; 
             });
              
         }
