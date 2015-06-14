@@ -2,9 +2,9 @@
 using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Practices.Prism.Mvvm.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
+using Windows.UI.Popups;
+using Windows.UI.Xaml.Controls;
 
 namespace IftarUniversal.ViewModels
 {
@@ -16,6 +16,7 @@ namespace IftarUniversal.ViewModels
 
         #region Command
         public DelegateCommand BackCommand { get; private set; }
+        public DelegateCommand<ItemClickEventArgs> MenuClickedCommand { get; private set; }
 
         #endregion
 
@@ -25,18 +26,28 @@ namespace IftarUniversal.ViewModels
 
         public SettingPageViewModel(INavigationService navigationService)
         {
-            this._navigationService = navigationService; 
-
+            this._navigationService = navigationService;
+             
             MenuList = new ObservableCollection<String>();
             MenuList.Add("Privacy Policy");
-            MenuList.Add("About");
-
+            MenuList.Add("About"); 
             BackCommand = new DelegateCommand(() =>
             {
                 _navigationService.GoBack();
-            });
+            });  
 
-
+            MenuClickedCommand = new DelegateCommand<ItemClickEventArgs>(async (args) =>
+            {
+                if (args.ClickedItem.ToString() == MenuList[0])
+                {
+                    navigationService.Navigate("PrivacyPolicy", null);
+                }
+                else if (args.ClickedItem.ToString() == MenuList[1])
+                {
+                    MessageDialog dialog = new MessageDialog("Created by : Aditya Wibisana" + Environment.NewLine + "aditya.wibisana@gmail.com");
+                    await dialog.ShowAsync();
+                }
+            }); 
         }
     }
 }

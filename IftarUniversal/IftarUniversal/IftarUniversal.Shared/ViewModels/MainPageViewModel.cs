@@ -8,6 +8,7 @@ using System.Threading;
 using Windows.ApplicationModel.Resources;
 using Windows.Devices.Geolocation;
 using Windows.UI.Core;
+using Windows.UI.Popups;
 
 namespace IftarUniversal.ViewModels
 {
@@ -73,7 +74,7 @@ namespace IftarUniversal.ViewModels
         private LocationService _locationService; 
         private INavigationService _navigationService;
         private ResourceLoader _langLoader;
-        private AppSettingService _settingService;
+        private AppSettingService _appSettingService;
         Timer _timer;
 
         #endregion
@@ -93,7 +94,7 @@ namespace IftarUniversal.ViewModels
             this._locationService = locationService;
             this._navigationService = navigationService;
             this._langLoader = langLoader;
-            this._settingService = settingService;
+            this._appSettingService = settingService;
 
             Status = "Calculating ...";
 
@@ -149,20 +150,35 @@ namespace IftarUniversal.ViewModels
 
         public async void Update()
         {
-            DateTime now = DateTime.Now;
+            DateTime now = DateTime.Now; 
 
-            if (!_settingService.IsLocationSet)
+            if (!_appSettingService.IsLocationSet)
             {
                 Geoposition position = await _locationService.GetPosition();
 
-                _settingService.UserLatitude = position.Coordinate.Point.Position.Latitude;
-                _settingService.UserLongitude = position.Coordinate.Point.Position.Longitude;
+                if (position == null)
+                {
+                    MessageDialog dialog = new MessageDialog("We can not get your location. Application will now exit");
+                    await dialog.ShowAsync();
 
-                _settingService.IsLocationSet = true;
-            }
+                    App.Current.Exit();
+                }
+
+                _appSettingService.UserLatitude = position.Coordinate.Point.Position.Latitude;
+                _appSettingService.UserLongitude = position.Coordinate.Point.Position.Longitude;
+
+                _appSettingService.IsLocationSet = true;
+
+                //if (!_appSettingService.IsLocationEnabled)
+                //{
+                //    MessageDialog dialog = new MessageDialog("Location must be enabled before you can continue");
+                //    await dialog.ShowAsync();
+                //    _navigationService.Navigate("PrivacyPolicyPage", null);
+                //}
+            } 
 
             var x = _prayTime.getPrayerTimes(now.Year, now.Month, now.Day, 
-                _settingService.UserLatitude, _settingService.UserLongitude, 
+                _appSettingService.UserLatitude, _appSettingService.UserLongitude, 
                 TimeZoneInfo.Local.BaseUtcOffset.Hours); 
 
 

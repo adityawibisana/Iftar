@@ -1,0 +1,46 @@
+﻿<storeApps:VisualStateAwarePage
+    x:Class="IftarUniversal.Views.PrivacyPolicyPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:IftarUniversal.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:storeApps="using:Microsoft.Practices.Prism.StoreApps"
+    xmlns:mvvm="using:Microsoft.Practices.Prism.Mvvm"  
+    mvvm:ViewModelLocator.AutoWireViewModel="True"
+    xmlns:dd="using:IftarUniversal.DummyData"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    d:DataContext="{d:DesignInstance dd:SettingPageVMDummy, IsDesignTimeCreatable=True}">
+
+    <i:Interaction.Behaviors>
+        <core:EventTriggerBehavior EventName="Loaded">
+            <core:InvokeCommandAction Command="{Binding PageLoadedCommand}"></core:InvokeCommandAction>
+        </core:EventTriggerBehavior>
+    </i:Interaction.Behaviors>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Privacy Policy" Margin="12" FontSize="36"></TextBlock>
+        
+        <TextBlock Grid.Row="1" Text="This application use your location, so that we can calculate the Iftar time for you. We will not collect any information regarding your information." 
+                   TextWrapping="Wrap" Margin="12" FontSize="24"></TextBlock>
+        
+        <ToggleSwitch Name="LocationSwitch" Grid.Row="2" Margin="12" OffContent="Turn On Location" OnContent="Turn Off Location" IsOn="{Binding IsLocationEnabled, Mode=TwoWay}">
+            <i:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="IsEnabledChanged">
+                    <core:InvokeCommandAction Command="{Binding IsEnabledChangedCommand}"
+                                              CommandParameter="{Binding ElementName=LocationSwitch, Path=IsOn}"
+                      />
+                </core:EventTriggerBehavior>
+            </i:Interaction.Behaviors>
+        </ToggleSwitch>
+
+    </Grid>
+</storeApps:VisualStateAwarePage>

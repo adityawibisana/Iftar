@@ -5,24 +5,59 @@
     xmlns:local="using:IftarUniversal.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mvvm="using:Microsoft.Practices.Prism.Mvvm" 
     xmlns:storeApps="using:Microsoft.Practices.Prism.StoreApps"
-    xmlns:mvvm="using:Microsoft.Practices.Prism.Mvvm"
-    xmlns:toolkit="using:WinRTXamlToolkit.Controls"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     mvvm:ViewModelLocator.AutoWireViewModel="True"
-    
-    >
+    mc:Ignorable="d"
+    xmlns:dd="using:IftarUniversal.DummyData"
+    d:DataContext="{d:DesignInstance dd:MainPageVMDummy, IsDesignTimeCreatable=True}">
 
-    <Grid> 
-        <toolkit:Gauge  
-                       Visibility="Visible" 
-                       Minimum="0"
-                       Maximum="100"
-                       Value="90"
-                       TickBrush="Transparent" 
-                       ScaleTickBrush="Transparent"></toolkit:Gauge>
-        <TextBlock Text="Windows Phone 8" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+    <storeApps:VisualStateAwarePage.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="90"></Setter>
+
+        </Style>
+    </storeApps:VisualStateAwarePage.Resources>
+
+    <i:Interaction.Behaviors>
+        <core:EventTriggerBehavior EventName="Loaded">
+            <core:InvokeCommandAction Command="{Binding PageLoadedCommand}"></core:InvokeCommandAction>
+        </core:EventTriggerBehavior>
+    </i:Interaction.Behaviors>
+
+
+
+    <Grid Background="Black">
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Button VerticalAlignment="Top" HorizontalAlignment="Right" Content="֍" Command="{Binding MenuCommand}" Margin="12" BorderThickness="0"></Button>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+            <Grid>
+                <TextBlock Text="{Binding Hour}"></TextBlock>
+                <TextBlock x:Uid="Hour" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Bottom"></TextBlock>
+            </Grid>
+            <TextBlock Text="."></TextBlock>
+            <Grid>
+                <TextBlock Text="{Binding Minute}"></TextBlock>
+                <TextBlock x:Uid="Minute" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Bottom"></TextBlock>
+            </Grid>
+            <TextBlock Text="."></TextBlock>
+            <Grid>
+                <TextBlock Text="{Binding Second}"></TextBlock>
+                <TextBlock x:Uid="Second" FontSize="12"  HorizontalAlignment="Center" VerticalAlignment="Bottom"></TextBlock>
+            </Grid>
+        </StackPanel>
+
+
+        <TextBlock Text="{Binding Status}" Grid.Row="1" HorizontalAlignment="Center" FontSize="24" VerticalAlignment="Top" Margin="12"></TextBlock>
+
 
     </Grid>
+
 </storeApps:VisualStateAwarePage>

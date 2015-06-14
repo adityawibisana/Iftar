@@ -17,8 +17,8 @@ namespace IftarUniversal.Service
         public bool IsLocationSet
         {
             get
-            { 
-                return localSettings.Values["IsLocationSet"] == null ? false : true;
+            {    
+                return localSettings.Values["IsLocationSet"] == null ? false : (bool) localSettings.Values["IsLocationSet"];
             }
             set
             {
@@ -47,6 +47,18 @@ namespace IftarUniversal.Service
             set
             {
                 localSettings.Values["UserLongitude"] = value;
+            }
+        }
+
+        public bool IsLocationEnabled
+        {
+            get
+            {
+                return localSettings.Values["IsLocationEnabled"] == null ? true : (bool) localSettings.Values["IsLocationEnabled"];
+            }
+            set
+            {
+                localSettings.Values["IsLocationEnabled"] = value;
             }
         }
     }

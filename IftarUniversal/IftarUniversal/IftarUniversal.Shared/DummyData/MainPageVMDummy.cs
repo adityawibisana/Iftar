@@ -61,7 +61,7 @@ namespace IftarUniversal.DummyData
 
         public MainPageVMDummy()
         {
-            Hour = 10;
+            Hour = 99;
             Minute = 59;
             Second = 48;
             Status = "Sahoor Time Remaining";
