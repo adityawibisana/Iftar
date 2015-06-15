@@ -160,14 +160,20 @@ namespace IftarUniversal.ViewModels
             bool isFirstTimeScheduler = false;
             if (!_appSettingService.IsLocationSet)
             {
-                Geoposition position = await _locationService.GetPosition();
+                Geoposition position = null;
+                try
+                {
+                    position = await _locationService.GetPosition();
+                }
+                catch { }
 
                 if (position == null)
                 {
-                    MessageDialog dialog = new MessageDialog("We can not get your location. Application will now exit");
-                    await dialog.ShowAsync();
+                    MessageDialog dialog = new MessageDialog("We can not get your location. Please enable location. Application will now exit");
+                    await dialog.ShowAsync(); 
 
                     App.Current.Exit();
+                    return;
                 } 
 
                 _appSettingService.UserLatitude = position.Coordinate.Point.Position.Latitude;

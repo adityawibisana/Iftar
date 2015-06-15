@@ -7,8 +7,7 @@ namespace IftarUniversal.Service
 {
     public class BackgroundTaskService : IBackgroundTask
     {
-        #region Field
-        private static readonly string BACKGROUND_TASK_NAME = "IftarBackgroundTaskService";
+        #region Field 
         private static readonly string BACKGROUND_TASK_ENTRY_POINT_NAME = "Tasks.IftarBackgroundTask";
         public static readonly string TimeTriggeredTaskName = "TimeTriggeredTask";
         private PrayTime _prayTime;
@@ -32,19 +31,19 @@ namespace IftarUniversal.Service
         {
             foreach (var task in Windows.ApplicationModel.Background.BackgroundTaskRegistration.AllTasks)
             {
-                if (task.Value.Name == BACKGROUND_TASK_NAME)
+                if (task.Value.Name == BACKGROUND_TASK_ENTRY_POINT_NAME)
                 { 
                     return;
                 }
             }
 
-            if (TaskRequiresBackgroundAccess(BACKGROUND_TASK_NAME))
+            if (TaskRequiresBackgroundAccess(BACKGROUND_TASK_ENTRY_POINT_NAME))
             {
                 await BackgroundExecutionManager.RequestAccessAsync();
             }
 
             BackgroundTaskBuilder builder = new BackgroundTaskBuilder();
-            builder.Name = BACKGROUND_TASK_NAME;
+            builder.Name = BACKGROUND_TASK_ENTRY_POINT_NAME;
             builder.TaskEntryPoint = BACKGROUND_TASK_ENTRY_POINT_NAME;
             builder.SetTrigger(new TimeTrigger(60 * 24, true));
             //builder.SetTrigger(new TimeTrigger(1, false)); //1 menit untuk testing

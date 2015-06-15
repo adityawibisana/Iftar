@@ -155,8 +155,8 @@
     </SDKReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Background task sample\C#\Tasks\Tasks.csproj">
-      <Project>{9842b4c3-dc73-4f89-a00e-1f78123d79e9}</Project>
+    <ProjectReference Include="..\..\Tasks\Tasks.csproj">
+      <Project>{35d214ae-0267-46bb-b234-fb7198d8f3d6}</Project>
       <Name>Tasks</Name>
     </ProjectReference>
   </ItemGroup>
