@@ -36,7 +36,9 @@ namespace IftarUniversal
             _container.RegisterType<PrayTime>(new ContainerControlledLifetimeManager());
             _container.RegisterType<LocationService>(new ContainerControlledLifetimeManager());
             _container.RegisterType<AppSettingService>(new ContainerControlledLifetimeManager());
-            _container.RegisterInstance(typeof(ResourceLoader), new ResourceLoader(), new ContainerControlledLifetimeManager()); 
+            _container.RegisterInstance(typeof(ResourceLoader), new ResourceLoader(), new ContainerControlledLifetimeManager());
+
+            _container.RegisterType<BackgroundTaskService>(new ContainerControlledLifetimeManager());
 
             ViewModelLocationProvider.SetDefaultViewModelFactory((viewModelType) => _container.Resolve(viewModelType)); 
             return Task.FromResult<object>(null);

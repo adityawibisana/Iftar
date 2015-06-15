@@ -14,6 +14,18 @@ namespace IftarUniversal.Service
             localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
         }
 
+        public bool IsFirstTimeScheduler
+        {
+            get
+            {
+                return localSettings.Values["IsFirstTimeScheduler"] == null ? true : (bool)localSettings.Values["IsFirstTimeScheduler"];
+            }
+            set
+            {
+                localSettings.Values["IsFirstTimeScheduler"] = false;
+            }
+        }
+
         public bool IsLocationSet
         {
             get

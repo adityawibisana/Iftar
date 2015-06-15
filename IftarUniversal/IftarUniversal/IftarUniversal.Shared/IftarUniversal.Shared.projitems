@@ -18,8 +18,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)DummyData\MainPageVMDummy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DummyData\SettingPageVMDummy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Service\AppSettingService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Service\BackgroundTaskService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Service\LocationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Service\PrayTime.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Service\ToastNotificationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MainPageViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\PrivacyPolicyPageViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SettingPageViewModel.cs" />

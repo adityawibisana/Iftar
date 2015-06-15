@@ -75,6 +75,7 @@ namespace IftarUniversal.ViewModels
         private INavigationService _navigationService;
         private ResourceLoader _langLoader;
         private AppSettingService _appSettingService;
+        private BackgroundTaskService _backgroundTaskService;
         Timer _timer;
 
         #endregion
@@ -88,13 +89,17 @@ namespace IftarUniversal.ViewModels
         double dLat = -8.636867;
         double dLong = 115.26345;
         #endregion
-        public MainPageViewModel(PrayTime prayTime, LocationService locationService, INavigationService navigationService, ResourceLoader langLoader, AppSettingService settingService)
+        public MainPageViewModel(PrayTime prayTime, LocationService locationService, INavigationService navigationService, ResourceLoader langLoader, 
+            AppSettingService settingService, BackgroundTaskService backgroundTaskService)
         { 
             this._prayTime = prayTime;
             this._locationService = locationService;
             this._navigationService = navigationService;
             this._langLoader = langLoader;
             this._appSettingService = settingService;
+            this._backgroundTaskService = backgroundTaskService;
+
+            backgroundTaskService.Create(); 
 
             Status = "Calculating ...";
 
@@ -150,8 +155,9 @@ namespace IftarUniversal.ViewModels
 
         public async void Update()
         {
-            DateTime now = DateTime.Now; 
+            DateTime now = DateTime.Now;
 
+            bool isFirstTimeScheduler = false;
             if (!_appSettingService.IsLocationSet)
             {
                 Geoposition position = await _locationService.GetPosition();
@@ -162,12 +168,13 @@ namespace IftarUniversal.ViewModels
                     await dialog.ShowAsync();
 
                     App.Current.Exit();
-                }
+                } 
 
                 _appSettingService.UserLatitude = position.Coordinate.Point.Position.Latitude;
                 _appSettingService.UserLongitude = position.Coordinate.Point.Position.Longitude;
 
                 _appSettingService.IsLocationSet = true;
+                isFirstTimeScheduler = true;
 
                 //if (!_appSettingService.IsLocationEnabled)
                 //{
@@ -209,7 +216,14 @@ namespace IftarUniversal.ViewModels
 
             Hour = ts.Hours;
             Minute = ts.Minutes;
-            Second = ts.Seconds;
+            Second = ts.Seconds; 
+            
+            if (isFirstTimeScheduler)
+            { 
+                ToastNotificationService toast = new ToastNotificationService();
+                toast.CreateToast(fajrTime.AddMinutes(-20.0), "20 minutes before Fajr");
+                toast.CreateToast(maghribTime, "Iftar Time"); 
+            } 
         }
 
         private int[] MicroTimeConvert(String time)
