@@ -10,24 +10,34 @@
     xmlns:mvvm="using:Microsoft.Practices.Prism.Mvvm"  
     mvvm:ViewModelLocator.AutoWireViewModel="True"
     xmlns:dd="using:IftarUniversal.DummyData"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     d:DataContext="{d:DesignInstance dd:SettingPageVMDummy, IsDesignTimeCreatable=True}">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         
-        <Button Content="Back" VerticalAlignment="Top" HorizontalAlignment="Left" Command="{Binding BackCommand}" Margin="12,12"></Button>
-        
-        <ListView ItemsSource="{Binding MenuList}" Grid.Row="1" Margin="12,12,0,0">
+        <!--<Button Visibility="Collapsed" Content="Back" VerticalAlignment="Top" HorizontalAlignment="Left" Command="{Binding BackCommand}" Margin="12,12"></Button>-->
+
+        <TextBlock Text="Menu" Margin="12" FontSize="36"></TextBlock>
+
+        <ListView ItemsSource="{Binding MenuList}" Grid.Row="1" Margin="12" IsItemClickEnabled="True">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <TextBlock Text="{Binding}" VerticalAlignment="Center" Margin="12,8,0,0"></TextBlock>
+                        <TextBlock Text="{Binding}" FontSize="24"></TextBlock>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
+            <i:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="ItemClick">
+                    <core:InvokeCommandAction Command="{Binding MenuClickedCommand}"
+                      />
+                </core:EventTriggerBehavior>
+            </i:Interaction.Behaviors>
         </ListView>
 
     </Grid> 

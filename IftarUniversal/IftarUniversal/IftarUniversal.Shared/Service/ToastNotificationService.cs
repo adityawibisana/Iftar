@@ -9,11 +9,11 @@ namespace IftarUniversal.Service
 {
     public class ToastNotificationService 
     {
-        public void CreateToast(DateTime toastTime, String toastMessage)
+        public bool CreateToast(DateTime toastTime, String toastMessage)
         {
             if (toastTime.Ticks < DateTime.Now.Ticks)
             {
-                return;
+                return false;
             }
 
             ToastTemplateType toastTemplate = ToastTemplateType.ToastText01;
@@ -25,7 +25,8 @@ namespace IftarUniversal.Service
 
             
             ScheduledToastNotification scheduledToast = new ScheduledToastNotification(toastXml, toastTime);
-            ToastNotificationManager.CreateToastNotifier().AddToSchedule(scheduledToast); 
+            ToastNotificationManager.CreateToastNotifier().AddToSchedule(scheduledToast);
+            return true;
         }
     }
 }

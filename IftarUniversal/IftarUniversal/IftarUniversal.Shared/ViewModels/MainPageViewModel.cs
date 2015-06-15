@@ -120,7 +120,10 @@ namespace IftarUniversal.ViewModels
         } 
 
         private void StartTimer()
-        { 
+        {
+            if (_timer != null)
+                _timer.Dispose(); 
+
            _timer = new Timer(new TimerCallback( async (state) =>
            {
                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
@@ -228,7 +231,9 @@ namespace IftarUniversal.ViewModels
             { 
                 ToastNotificationService toast = new ToastNotificationService();
                 toast.CreateToast(fajrTime.AddMinutes(-20.0), "20 minutes before Fajr");
-                toast.CreateToast(maghribTime, "Iftar Time"); 
+                toast.CreateToast(maghribTime, "Iftar Time");
+
+                StartTimer();
             } 
         }
 

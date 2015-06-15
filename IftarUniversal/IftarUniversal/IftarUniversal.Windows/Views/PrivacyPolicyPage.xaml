@@ -1,5 +1,5 @@
 ﻿<storeApps:VisualStateAwarePage
-    x:Class="IftarUniversal.Views.SettingPage"
+    x:Class="IftarUniversal.Views.PrivacyPolicyPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:IftarUniversal.Views"
@@ -14,31 +14,27 @@
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     d:DataContext="{d:DesignInstance dd:SettingPageVMDummy, IsDesignTimeCreatable=True}">
 
+    <i:Interaction.Behaviors>
+        <core:EventTriggerBehavior EventName="Loaded">
+            <core:InvokeCommandAction Command="{Binding PageLoadedCommand}"></core:InvokeCommandAction>
+        </core:EventTriggerBehavior>
+    </i:Interaction.Behaviors>
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
+
+        <TextBlock Text="Privacy Policy" Margin="12" FontSize="36"></TextBlock>
         
-        <!--<Button Visibility="Collapsed" Content="Back" VerticalAlignment="Top" HorizontalAlignment="Left" Command="{Binding BackCommand}" Margin="12,12"></Button>-->
+        <TextBlock Grid.Row="1" Text="This application use your location, so that we can calculate the Iftar time for you. We will not collect any information regarding your information." 
+                   TextWrapping="Wrap" Margin="12" FontSize="24"></TextBlock>
 
-        <TextBlock Text="Menu" Margin="12" FontSize="36"></TextBlock>
+        <ToggleSwitch Name="LocationSwitch" Grid.Row="2" Margin="12" OffContent="Turn On Location" OnContent="Turn Off Location"
+                      IsOn="{Binding IsLocationEnabled, Mode=TwoWay}"> 
+        </ToggleSwitch>
 
-        <ListView ItemsSource="{Binding MenuList}" Grid.Row="1" Margin="12" IsItemClickEnabled="True">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <TextBlock Text="{Binding}" FontSize="24"></TextBlock>
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-            <i:Interaction.Behaviors>
-                <core:EventTriggerBehavior EventName="ItemClick">
-                    <core:InvokeCommandAction Command="{Binding MenuClickedCommand}"
-                      />
-                </core:EventTriggerBehavior>
-            </i:Interaction.Behaviors>
-        </ListView>
-
-    </Grid> 
+    </Grid>
 </storeApps:VisualStateAwarePage>
